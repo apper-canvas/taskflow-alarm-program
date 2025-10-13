@@ -31,12 +31,12 @@ if (task) {
       });
     } else {
       setFormData({
-        title: "",
-        description: "",
-        dueDate: "",
-        priority: "medium",
-        category: "personal",
-        project: "General"
+title_c: "",
+        description_c: "",
+        due_date_c: "",
+        priority_c: "medium",
+        category_c: "personal",
+        project_c: "General"
       });
     }
     setErrors({});
@@ -44,7 +44,7 @@ if (task) {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.title.trim()) {
+if (!formData.title_c.trim()) {
       newErrors.title = "Title is required";
     }
     setErrors(newErrors);
@@ -126,8 +126,7 @@ value={formData.description_c}
 type="date"
                 value={formData.due_date_c}
                 onChange={(e) => handleChange("due_date_c", e.target.value)}
-                onChange={(e) => handleChange("dueDate", e.target.value)}
-              />
+/>
             </FormField>
 
             <FormField label="Priority">
@@ -157,8 +156,7 @@ value={formData.category_c}
             <FormField label="Project" required>
 <Input
                 value={formData.project_c}
-                onChange={(e) => handleChange('project_c', e.target.value)}
-                onChange={(e) => handleChange('project', e.target.value)}
+onChange={(e) => handleChange('project_c', e.target.value)}
                 placeholder="Enter project name"
               />
             </FormField>
