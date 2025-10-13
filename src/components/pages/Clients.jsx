@@ -5,70 +5,71 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { AuthContext } from '../../App';
-import projectService from "@/services/api/projectService";
+import clientService from "@/services/api/clientService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import SearchBar from "@/components/molecules/SearchBar";
-import ProjectCard from "@/components/organisms/ProjectCard";
-import ProjectModal from "@/components/organisms/ProjectModal";
+import ClientCard from "@/components/organisms/ClientCard";
+import ClientModal from "@/components/organisms/ClientModal";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 
-const Projects = () => {
+const Clients = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { logout } = useContext(AuthContext);
 
-  const [projects, setProjects] = useState([]);
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState(null);
   const [sortBy, setSortBy] = useState("createdAt");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState(null);
+  const [editingClient, setEditingClient] = useState(null);
 
-  const loadProjects = async () => {
+  const loadClients = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await projectService.getAll();
-      setProjects(data);
+      const data = await clientService.getAll();
+      setClients(data);
     } catch (err) {
       setError(err.message);
-      toast.error("Failed to load projects");
+      toast.error("Failed to load clients");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadProjects();
+    loadClients();
   }, []);
 
   const allTags = useMemo(() => {
     const tags = new Set();
-    projects.forEach(project => {
-      if (project.Tags) {
-        project.Tags.split(',').forEach(tag => {
+    clients.forEach(client => {
+      if (client.Tags) {
+        client.Tags.split(',').forEach(tag => {
           const trimmed = tag.trim();
           if (trimmed) tags.add(trimmed);
         });
       }
     });
     return Array.from(tags);
-  }, [projects]);
+  }, [clients]);
 
-  const filteredAndSortedProjects = useMemo(() => {
-    let filtered = projects.filter((project) => {
+  const filteredAndSortedClients = useMemo(() => {
+    let filtered = clients.filter((client) => {
       const matchesSearch = 
-(project.name_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (project.description_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (project.client_c || "").toLowerCase().includes(searchQuery.toLowerCase());
+        (client.client_name_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (client.email_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (client.phone_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (client.company_c || "").toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchesTag = !selectedTag ||
-        (project.Tags && project.Tags.split(',').map(t => t.trim()).includes(selectedTag));
+        (client.Tags && client.Tags.split(',').map(t => t.trim()).includes(selectedTag));
       
       return matchesSearch && matchesTag;
     });
@@ -76,7 +77,7 @@ const Projects = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "name":
-          return (a.name_c || "").localeCompare(b.name_c || "");
+          return (a.client_name_c || "").localeCompare(b.client_name_c || "");
         case "createdAt":
         default:
           return new Date(b.CreatedOn || 0) - new Date(a.CreatedOn || 0);
@@ -84,47 +85,47 @@ const Projects = () => {
     });
 
     return filtered;
-  }, [projects, searchQuery, selectedTag, sortBy]);
+  }, [clients, searchQuery, selectedTag, sortBy]);
 
-  const handleNewProject = () => {
-    setEditingProject(null);
+  const handleNewClient = () => {
+    setEditingClient(null);
     setIsModalOpen(true);
   };
 
-  const handleEditProject = (project) => {
-    setEditingProject(project);
+  const handleEditClient = (client) => {
+    setEditingClient(client);
     setIsModalOpen(true);
   };
 
-  const handleSaveProject = async (projectData) => {
+  const handleSaveClient = async (clientData) => {
     try {
-      if (editingProject) {
-        const updated = await projectService.update(editingProject.Id, projectData);
+      if (editingClient) {
+        const updated = await clientService.update(editingClient.Id, clientData);
         if (updated) {
-          setProjects(prev => prev.map(p => p.Id === editingProject.Id ? updated : p));
+          setClients(prev => prev.map(c => c.Id === editingClient.Id ? updated : c));
           setIsModalOpen(false);
-          setEditingProject(null);
+          setEditingClient(null);
         }
       } else {
-        const created = await projectService.create(projectData);
+        const created = await clientService.create(clientData);
         if (created) {
-          setProjects(prev => [created, ...prev]);
+          setClients(prev => [created, ...prev]);
           setIsModalOpen(false);
         }
       }
     } catch (err) {
-      toast.error("Failed to save project");
+      toast.error("Failed to save client");
     }
   };
 
-  const handleDeleteProject = async (id) => {
-    if (!confirm("Are you sure you want to delete this project?")) {
+  const handleDeleteClient = async (id) => {
+    if (!confirm("Are you sure you want to delete this client?")) {
       return;
     }
 
-    const success = await projectService.delete(id);
+    const success = await clientService.delete(id);
     if (success) {
-      setProjects(prev => prev.filter(p => p.Id !== id));
+      setClients(prev => prev.filter(c => c.Id !== id));
     }
   };
 
@@ -133,7 +134,7 @@ const Projects = () => {
   }
 
   if (error) {
-    return <Error message={error} onRetry={loadProjects} />;
+    return <Error message={error} onRetry={loadClients} />;
   }
 
   return (
@@ -141,26 +142,18 @@ const Projects = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-<div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/projects')}
               className="flex items-center gap-2"
             >
               <ApperIcon name="ArrowLeft" size={20} />
-              <span>Back to Tasks</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/clients')}
-              className="flex items-center gap-2"
-            >
-              <ApperIcon name="Users" size={20} />
-              <span>View Clients</span>
+              <span>Back to Projects</span>
             </Button>
             <div>
-              <h1 className="text-4xl font-bold text-slate-800">Projects</h1>
-              <p className="text-slate-600 mt-1">Manage your project portfolio</p>
+              <h1 className="text-4xl font-bold text-slate-800">Clients</h1>
+              <p className="text-slate-600 mt-1">Manage your client relationships</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -183,7 +176,7 @@ const Projects = () => {
               <SearchBar 
                 value={searchQuery} 
                 onChange={setSearchQuery}
-                placeholder="Search projects..."
+                placeholder="Search clients..."
               />
             </div>
             <div className="flex gap-3 w-full sm:w-auto">
@@ -197,11 +190,11 @@ const Projects = () => {
               </select>
               <Button 
                 variant="primary" 
-                onClick={handleNewProject}
+                onClick={handleNewClient}
                 className="flex items-center gap-2 whitespace-nowrap"
               >
                 <ApperIcon name="Plus" size={20} />
-                <span>New Project</span>
+                <span>New Client</span>
               </Button>
             </div>
           </div>
@@ -236,27 +229,27 @@ const Projects = () => {
           )}
         </div>
 
-        {/* Projects Grid */}
-        {filteredAndSortedProjects.length === 0 ? (
+        {/* Clients Grid */}
+        {filteredAndSortedClients.length === 0 ? (
           <Empty
-            title="No projects found"
-            message={searchQuery || selectedTag ? "Try adjusting your search or filters" : "Create your first project to get started"}
-            icon="FolderOpen"
+            title="No clients found"
+            message={searchQuery || selectedTag ? "Try adjusting your search or filters" : "Add your first client to get started"}
+            icon="Users"
             suggestions={[
-              "Website Redesign",
-              "Mobile App Development",
-              "Marketing Campaign Q1"
+              "Acme Corporation",
+              "Tech Innovations Inc",
+              "Global Solutions Ltd"
             ]}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
-              {filteredAndSortedProjects.map((project) => (
-                <ProjectCard
-                  key={project.Id}
-                  project={project}
-                  onEdit={handleEditProject}
-                  onDelete={handleDeleteProject}
+              {filteredAndSortedClients.map((client) => (
+                <ClientCard
+                  key={client.Id}
+                  client={client}
+                  onEdit={handleEditClient}
+                  onDelete={handleDeleteClient}
                 />
               ))}
             </AnimatePresence>
@@ -264,18 +257,18 @@ const Projects = () => {
         )}
       </div>
 
-      {/* Project Modal */}
-      <ProjectModal
+      {/* Client Modal */}
+      <ClientModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setEditingProject(null);
+          setEditingClient(null);
         }}
-        onSave={handleSaveProject}
-        project={editingProject}
+        onSave={handleSaveClient}
+        client={editingClient}
       />
     </div>
   );
 };
 
-export default Projects;
+export default Clients;

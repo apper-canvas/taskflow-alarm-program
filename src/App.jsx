@@ -12,6 +12,7 @@ import PromptPassword from "@/components/pages/PromptPassword";
 import NotFound from "@/components/pages/NotFound";
 import TaskManager from "@/components/pages/TaskManager";
 import Projects from "@/components/pages/Projects";
+import Clients from "@/components/pages/Clients";
 // Create auth context
 export const AuthContext = createContext(null);
 
@@ -117,15 +118,16 @@ function App() {
   
 return (
 <AuthContext.Provider value={authMethods}>
-      <Routes>
+<Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/callback" element={<Callback />} />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
         <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-<Route path="/" element={<TaskManager />} />
+        <Route path="/" element={<TaskManager />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/clients" element={<Clients />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer 
