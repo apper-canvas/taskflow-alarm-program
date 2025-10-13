@@ -27,7 +27,7 @@ const TaskList = ({ tasks, onToggle, onEdit, onDelete, categories, showEmpty = t
     <div className="space-y-3">
       <AnimatePresence mode="popLayout">
         {tasks.map((task) => (
-          <TaskCard
+<TaskCard
             key={task.Id}
             task={task}
             onToggle={onToggle}

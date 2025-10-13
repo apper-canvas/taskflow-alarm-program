@@ -51,8 +51,9 @@ const TaskManager = () => {
 
   const filteredAndSortedTasks = useMemo(() => {
     let filtered = tasks.filter((task) => {
-      const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          task.description.toLowerCase().includes(searchQuery.toLowerCase());
+const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          task.project.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = !selectedCategory || task.category === selectedCategory;
       const matchesStatus = showCompleted ? task.completed : !task.completed;
       return matchesSearch && matchesCategory && matchesStatus;

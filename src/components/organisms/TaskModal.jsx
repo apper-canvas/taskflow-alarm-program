@@ -9,11 +9,12 @@ import FormField from "@/components/molecules/FormField";
 
 const TaskModal = ({ isOpen, onClose, onSave, task, categories }) => {
   const [formData, setFormData] = useState({
-    title: "",
+title: "",
     description: "",
     dueDate: "",
     priority: "medium",
-    category: "personal"
+    category: "personal",
+    project: "General"
   });
 
   const [errors, setErrors] = useState({});
@@ -25,7 +26,8 @@ const TaskModal = ({ isOpen, onClose, onSave, task, categories }) => {
         description: task.description || "",
         dueDate: task.dueDate ? format(new Date(task.dueDate), "yyyy-MM-dd") : "",
         priority: task.priority,
-        category: task.category
+category: task.category,
+        project: task.project
       });
     } else {
       setFormData({
@@ -33,7 +35,8 @@ const TaskModal = ({ isOpen, onClose, onSave, task, categories }) => {
         description: "",
         dueDate: "",
         priority: "medium",
-        category: "personal"
+        category: "personal",
+        project: "General"
       });
     }
     setErrors({});
@@ -148,8 +151,15 @@ const TaskModal = ({ isOpen, onClose, onSave, task, categories }) => {
                   </option>
                 ))}
               </Select>
-            </FormField>
+</FormField>
 
+            <FormField label="Project" required>
+              <Input
+                value={formData.project}
+                onChange={(e) => handleChange('project', e.target.value)}
+                placeholder="Enter project name"
+              />
+            </FormField>
             <div className="flex gap-3 pt-4">
               <Button type="button" variant="ghost" onClick={onClose} className="flex-1">
                 Cancel

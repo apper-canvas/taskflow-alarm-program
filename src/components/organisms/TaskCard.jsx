@@ -52,10 +52,16 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categoryColor }) => {
                 <span>{format(new Date(task.dueDate), "MMM d, yyyy")}</span>
               </div>
             )}
-            
-            <div className="flex items-center gap-1.5 text-sm text-slate-600">
-              <ApperIcon name="Tag" size={14} />
-              <span className="capitalize">{task.category}</span>
+<div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 text-sm text-slate-600">
+                <ApperIcon name="Tag" size={14} />
+                <span className="capitalize">{task.category}</span>
+              </div>
+              
+              <div className="flex items-center gap-1.5 text-sm text-slate-600">
+                <ApperIcon name="Briefcase" size={14} />
+                <span>{task.project}</span>
+              </div>
             </div>
           </div>
         </div>

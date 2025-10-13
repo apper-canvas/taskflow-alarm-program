@@ -23,9 +23,10 @@ const taskService = {
       Id: maxId + 1,
       title: taskData.title,
       description: taskData.description || "",
-      dueDate: taskData.dueDate || null,
+dueDate: taskData.dueDate || null,
       priority: taskData.priority || "medium",
       category: taskData.category || "personal",
+      project: taskData.project || "General",
       completed: false,
       completedAt: null,
       createdAt: new Date().toISOString(),
@@ -40,7 +41,7 @@ const taskService = {
     const index = tasks.findIndex((t) => t.Id === parseInt(id));
     if (index !== -1) {
       tasks[index] = {
-        ...tasks[index],
+...tasks[index],
         ...taskData,
         updatedAt: new Date().toISOString()
       };
