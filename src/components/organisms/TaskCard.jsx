@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { format } from "date-fns";
+import React from "react";
+import { cn } from "@/utils/cn";
 import ApperIcon from "@/components/ApperIcon";
 import Checkbox from "@/components/atoms/Checkbox";
 import PriorityBadge from "@/components/molecules/PriorityBadge";
-import { cn } from "@/utils/cn";
 
 const TaskCard = ({ task, onToggle, onEdit, onDelete, categoryColor }) => {
   const isOverdue = task.due_date_c && new Date(task.due_date_c) < new Date() && !task.completed_c;
