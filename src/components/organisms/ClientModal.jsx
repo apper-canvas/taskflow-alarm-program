@@ -109,7 +109,6 @@ setFormData({
                 required
               />
             </FormField>
-</FormField>
 
             <FormField label="Email">
               <Input
