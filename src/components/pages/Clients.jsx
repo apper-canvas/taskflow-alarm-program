@@ -62,11 +62,19 @@ const Clients = () => {
 
   const filteredAndSortedClients = useMemo(() => {
     let filtered = clients.filter((client) => {
+const parseContactInfo = (description) => {
+        try {
+          return JSON.parse(description || '{}');
+        } catch {
+          return {};
+        }
+      };
+      const contactInfo = parseContactInfo(client.description_c);
       const matchesSearch = 
-        (client.client_name_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (client.email_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (client.phone_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (client.company_c || "").toLowerCase().includes(searchQuery.toLowerCase());
+        (client.Name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (contactInfo.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (contactInfo.phone || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (contactInfo.company || "").toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchesTag = !selectedTag ||
         (client.Tags && client.Tags.split(',').map(t => t.trim()).includes(selectedTag));
@@ -77,7 +85,7 @@ const Clients = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "name":
-          return (a.client_name_c || "").localeCompare(b.client_name_c || "");
+return (a.Name || "").localeCompare(b.Name || "");
         case "createdAt":
         default:
           return new Date(b.CreatedOn || 0) - new Date(a.CreatedOn || 0);

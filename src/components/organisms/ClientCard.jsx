@@ -31,7 +31,7 @@ const ClientCard = ({ client, onEdit, onDelete }) => {
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="text-xl font-bold text-slate-800 mb-1">
-              {client.client_name_c || "Unnamed Client"}
+{client.Name || "Unnamed Client"}
             </h3>
             {client.CreatedOn && (
               <p className="text-xs text-slate-500">
@@ -46,24 +46,38 @@ const ClientCard = ({ client, onEdit, onDelete }) => {
 
         {/* Contact Information */}
         <div className="space-y-2 mb-4">
-          {client.email_c && (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <ApperIcon name="Mail" size={16} className="text-slate-400" />
-              <span className="truncate">{client.email_c}</span>
-            </div>
-          )}
-          {client.phone_c && (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <ApperIcon name="Phone" size={16} className="text-slate-400" />
-              <span>{client.phone_c}</span>
-            </div>
-          )}
-          {client.company_c && (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <ApperIcon name="Building2" size={16} className="text-slate-400" />
-              <span className="truncate">{client.company_c}</span>
-            </div>
-          )}
+{(() => {
+            const parseContactInfo = (description) => {
+              try {
+                return JSON.parse(description || '{}');
+              } catch {
+                return {};
+              }
+            };
+            const contactInfo = parseContactInfo(client.description_c);
+            return (
+              <>
+                {contactInfo.email && (
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <ApperIcon name="Mail" size={16} className="text-slate-400" />
+                    <span className="truncate">{contactInfo.email}</span>
+                  </div>
+                )}
+                {contactInfo.phone && (
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <ApperIcon name="Phone" size={16} className="text-slate-400" />
+                    <span>{contactInfo.phone}</span>
+                  </div>
+                )}
+                {contactInfo.company && (
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <ApperIcon name="Building2" size={16} className="text-slate-400" />
+                    <span className="truncate">{contactInfo.company}</span>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
 
         {/* Tags */}

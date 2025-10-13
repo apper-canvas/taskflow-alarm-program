@@ -10,12 +10,9 @@ const clientService = {
       });
       
       const params = {
-        fields: [
+fields: [
           {"field": {"Name": "Name"}},
-          {"field": {"Name": "client_name_c"}},
-          {"field": {"Name": "email_c"}},
-          {"field": {"Name": "phone_c"}},
-          {"field": {"Name": "company_c"}},
+          {"field": {"Name": "description_c"}},
           {"field": {"Name": "Tags"}},
           {"field": {"Name": "CreatedOn"}},
           {"field": {"Name": "CreatedBy"}},
@@ -51,11 +48,8 @@ const clientService = {
       
       const params = {
         fields: [
-          {"field": {"Name": "Name"}},
-          {"field": {"Name": "client_name_c"}},
-          {"field": {"Name": "email_c"}},
-          {"field": {"Name": "phone_c"}},
-          {"field": {"Name": "company_c"}},
+{"field": {"Name": "Name"}},
+          {"field": {"Name": "description_c"}},
           {"field": {"Name": "Tags"}},
           {"field": {"Name": "CreatedOn"}},
           {"field": {"Name": "CreatedBy"}},
@@ -87,10 +81,12 @@ const clientService = {
       
       const params = {
         records: [{
-          client_name_c: clientData.client_name_c,
-          email_c: clientData.email_c || "",
-          phone_c: clientData.phone_c || "",
-          company_c: clientData.company_c || "",
+Name: clientData.Name || clientData.client_name_c,
+          description_c: JSON.stringify({
+            email: clientData.email_c || "",
+            phone: clientData.phone_c || "",
+            company: clientData.company_c || ""
+          }),
           Tags: clientData.Tags || ""
         }]
       };
@@ -141,10 +137,16 @@ const clientService = {
         Id: parseInt(id)
       };
       
-      if (clientData.client_name_c) updateData.client_name_c = clientData.client_name_c;
-      if (clientData.email_c !== undefined) updateData.email_c = clientData.email_c;
-      if (clientData.phone_c !== undefined) updateData.phone_c = clientData.phone_c;
-      if (clientData.company_c !== undefined) updateData.company_c = clientData.company_c;
+if (clientData.Name || clientData.client_name_c) {
+        updateData.Name = clientData.Name || clientData.client_name_c;
+      }
+      if (clientData.email_c !== undefined || clientData.phone_c !== undefined || clientData.company_c !== undefined) {
+        updateData.description_c = JSON.stringify({
+          email: clientData.email_c || "",
+          phone: clientData.phone_c || "",
+          company: clientData.company_c || ""
+        });
+      }
       if (clientData.Tags !== undefined) updateData.Tags = clientData.Tags;
       
       const params = {

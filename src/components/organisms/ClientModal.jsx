@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
@@ -7,7 +7,7 @@ import FormField from "@/components/molecules/FormField";
 
 const ClientModal = ({ isOpen, onClose, onSave, client }) => {
   const [formData, setFormData] = useState({
-    client_name_c: "",
+    Name: "",
     email_c: "",
     phone_c: "",
     company_c: "",
@@ -15,18 +15,27 @@ const ClientModal = ({ isOpen, onClose, onSave, client }) => {
   });
   const [saving, setSaving] = useState(false);
 
+  const parseContactInfo = (description) => {
+    try {
+      return JSON.parse(description || '{}');
+    } catch {
+      return {};
+    }
+  };
+
   useEffect(() => {
     if (client) {
+      const contactInfo = parseContactInfo(client.description_c);
       setFormData({
-        client_name_c: client.client_name_c || "",
-        email_c: client.email_c || "",
-        phone_c: client.phone_c || "",
-        company_c: client.company_c || "",
+Name: client.Name || "",
+        email_c: contactInfo.email || "",
+        phone_c: contactInfo.phone || "",
+        company_c: contactInfo.company || "",
         Tags: client.Tags || ""
       });
     } else {
-      setFormData({
-        client_name_c: "",
+setFormData({
+        Name: "",
         email_c: "",
         phone_c: "",
         company_c: "",
@@ -92,14 +101,15 @@ const ClientModal = ({ isOpen, onClose, onSave, client }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <FormField label="Client Name" required>
+<FormField label="Client Name" required>
               <Input
-                value={formData.client_name_c}
-                onChange={(e) => handleChange("client_name_c", e.target.value)}
+                value={formData.Name}
+                onChange={(e) => handleChange("Name", e.target.value)}
                 placeholder="Enter client name"
                 required
               />
             </FormField>
+</FormField>
 
             <FormField label="Email">
               <Input
@@ -109,7 +119,6 @@ const ClientModal = ({ isOpen, onClose, onSave, client }) => {
                 placeholder="client@example.com"
               />
             </FormField>
-
             <FormField label="Phone">
               <Input
                 type="tel"
