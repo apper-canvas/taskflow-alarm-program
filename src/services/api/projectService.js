@@ -10,10 +10,11 @@ const projectService = {
       });
       
       const params = {
-        fields: [
+fields: [
           {"field": {"Name": "Name"}},
           {"field": {"Name": "name_c"}},
           {"field": {"Name": "description_c"}},
+          {"field": {"Name": "client_c"}},
           {"field": {"Name": "Tags"}},
           {"field": {"Name": "CreatedOn"}},
           {"field": {"Name": "CreatedBy"}},
@@ -48,10 +49,11 @@ const projectService = {
       });
       
       const params = {
-        fields: [
+fields: [
           {"field": {"Name": "Name"}},
           {"field": {"Name": "name_c"}},
           {"field": {"Name": "description_c"}},
+          {"field": {"Name": "client_c"}},
           {"field": {"Name": "Tags"}},
           {"field": {"Name": "CreatedOn"}},
           {"field": {"Name": "CreatedBy"}},
@@ -83,8 +85,9 @@ const projectService = {
       
       const params = {
         records: [{
-          name_c: projectData.name_c,
+name_c: projectData.name_c,
           description_c: projectData.description_c || "",
+          client_c: projectData.client_c || "",
           Tags: projectData.Tags || ""
         }]
       };
@@ -135,8 +138,9 @@ const projectService = {
         Id: parseInt(id)
       };
       
-      if (projectData.name_c) updateData.name_c = projectData.name_c;
+if (projectData.name_c) updateData.name_c = projectData.name_c;
       if (projectData.description_c !== undefined) updateData.description_c = projectData.description_c;
+      if (projectData.client_c !== undefined) updateData.client_c = projectData.client_c;
       if (projectData.Tags !== undefined) updateData.Tags = projectData.Tags;
       
       const params = {

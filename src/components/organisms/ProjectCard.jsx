@@ -37,8 +37,15 @@ const ProjectCard = ({ project, onEdit, onDelete }) => {
               <p className="text-xs text-slate-500">
                 Created {format(new Date(project.CreatedOn), "MMM d, yyyy")}
               </p>
-            )}
+)}
           </div>
+
+          {project.client_c && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <ApperIcon name="Building2" size={16} />
+              <span>{project.client_c}</span>
+            </div>
+          )}
           <div className="p-2 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg">
             <ApperIcon name="FolderOpen" size={20} className="text-primary" />
           </div>

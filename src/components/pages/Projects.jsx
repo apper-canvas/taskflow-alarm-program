@@ -63,10 +63,11 @@ const Projects = () => {
   const filteredAndSortedProjects = useMemo(() => {
     let filtered = projects.filter((project) => {
       const matchesSearch = 
-        (project.name_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (project.description_c || "").toLowerCase().includes(searchQuery.toLowerCase());
+(project.name_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (project.description_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (project.client_c || "").toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesTag = !selectedTag || 
+      const matchesTag = !selectedTag ||
         (project.Tags && project.Tags.split(',').map(t => t.trim()).includes(selectedTag));
       
       return matchesSearch && matchesTag;

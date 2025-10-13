@@ -7,8 +7,9 @@ import FormField from "@/components/molecules/FormField";
 
 const ProjectModal = ({ isOpen, onClose, onSave, project }) => {
   const [formData, setFormData] = useState({
-    name_c: "",
+name_c: "",
     description_c: "",
+    client_c: "",
     Tags: ""
   });
   const [errors, setErrors] = useState({});
@@ -17,13 +18,15 @@ const ProjectModal = ({ isOpen, onClose, onSave, project }) => {
     if (project) {
       setFormData({
         name_c: project.name_c || "",
-        description_c: project.description_c || "",
+description_c: project.description_c || "",
+        client_c: project.client_c || "",
         Tags: project.Tags || ""
       });
     } else {
       setFormData({
         name_c: "",
-        description_c: "",
+description_c: "",
+        client_c: "",
         Tags: ""
       });
     }
@@ -98,6 +101,14 @@ const ProjectModal = ({ isOpen, onClose, onSave, project }) => {
                   onChange={(e) => handleChange('name_c', e.target.value)}
                   placeholder="Enter project name"
                   className={errors.name_c ? 'border-error' : ''}
+                />
+</FormField>
+
+              <FormField label="Client" error={errors.client_c}>
+                <Input
+                  placeholder="Enter client name"
+                  value={formData.client_c}
+                  onChange={(e) => handleChange("client_c", e.target.value)}
                 />
               </FormField>
 
