@@ -19,9 +19,9 @@ const FilterBar = ({ categories, selectedCategory, onCategoryChange, sortBy, onS
         {categories.map((category) => (
           <CategoryChip
             key={category.Id}
-            category={category}
-            active={selectedCategory === category.name}
-            onClick={() => onCategoryChange(category.name)}
+            category={{ name: category.name_c, color: category.color_c }}
+            active={selectedCategory === category.name_c}
+            onClick={() => onCategoryChange(category.name_c)}
           />
         ))}
       </div>

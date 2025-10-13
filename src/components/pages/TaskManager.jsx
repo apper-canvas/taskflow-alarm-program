@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { AuthContext } from '../../App';
 import taskService from "@/services/api/taskService";
 import categoryService from "@/services/api/categoryService";
 import ApperIcon from "@/components/ApperIcon";
@@ -50,39 +53,39 @@ const TaskManager = () => {
   }, []);
 
   const filteredAndSortedTasks = useMemo(() => {
-    let filtered = tasks.filter((task) => {
-const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          task.project.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = !selectedCategory || task.category === selectedCategory;
-      const matchesStatus = showCompleted ? task.completed : !task.completed;
+let filtered = tasks.filter((task) => {
+      const matchesSearch = (task.title_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (task.description_c || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            (task.project_c || "").toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = !selectedCategory || task.category_c === selectedCategory;
+      const matchesStatus = showCompleted ? task.completed_c : !task.completed_c;
       return matchesSearch && matchesCategory && matchesStatus;
     });
 
     filtered.sort((a, b) => {
-      switch (sortBy) {
+switch (sortBy) {
         case "dueDate": {
-          if (!a.dueDate) return 1;
-          if (!b.dueDate) return -1;
-          return new Date(a.dueDate) - new Date(b.dueDate);
+          if (!a.due_date_c) return 1;
+          if (!b.due_date_c) return -1;
+          return new Date(a.due_date_c) - new Date(b.due_date_c);
         }
         case "priority": {
           const priorityOrder = { high: 0, medium: 1, low: 2 };
-          return priorityOrder[a.priority] - priorityOrder[b.priority];
+          return priorityOrder[a.priority_c] - priorityOrder[b.priority_c];
         }
         case "title":
-          return a.title.localeCompare(b.title);
+          return (a.title_c || "").localeCompare(b.title_c || "");
         case "createdAt":
         default:
-          return new Date(b.createdAt) - new Date(a.createdAt);
+          return new Date(b.created_at_c || 0) - new Date(a.created_at_c || 0);
       }
     });
 
     return filtered;
   }, [tasks, searchQuery, selectedCategory, sortBy, showCompleted]);
 
-  const activeTasks = tasks.filter((t) => !t.completed);
-  const completedTasks = tasks.filter((t) => t.completed);
+const activeTasks = tasks.filter((t) => !t.completed_c);
+  const completedTasks = tasks.filter((t) => t.completed_c);
 
   const handleQuickAdd = async (title) => {
     try {
@@ -97,7 +100,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
   const handleToggleComplete = async (id) => {
     try {
       const updatedTask = await taskService.toggleComplete(id);
-      setTasks((prev) =>
+setTasks((prev) =>
         prev.map((task) => (task.Id === id ? updatedTask : task))
       );
       if (updatedTask.completed) {
@@ -112,7 +115,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
   const handleSaveTask = async (taskData) => {
     try {
       if (editingTask) {
-        const updated = await taskService.update(editingTask.Id, taskData);
+const updated = await taskService.update(editingTask.Id, taskData);
         setTasks((prev) =>
           prev.map((task) => (task.Id === editingTask.Id ? updated : task))
         );
@@ -132,7 +135,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
   const handleDeleteTask = async (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
-        await taskService.delete(id);
+await taskService.delete(id);
         setTasks((prev) => prev.filter((task) => task.Id !== id));
         toast.success("Task deleted");
       } catch (err) {
@@ -214,7 +217,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
               </h2>
             </div>
             <TaskList
-              tasks={filteredAndSortedTasks.filter((t) => !t.completed)}
+tasks={filteredAndSortedTasks.filter((t) => !t.completed_c)}
               onToggle={handleToggleComplete}
               onEdit={handleEditTask}
               onDelete={handleDeleteTask}
@@ -222,7 +225,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
             />
           </div>
 
-          {completedTasks.length > 0 && (
+{completedTasks.length > 0 && (
             <div>
               <motion.button
                 onClick={() => setShowCompleted(!showCompleted)}
@@ -243,7 +246,7 @@ const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase(
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <TaskList
+<TaskList
                       tasks={filteredAndSortedTasks.filter((t) => t.completed)}
                       onToggle={handleToggleComplete}
                       onEdit={handleEditTask}

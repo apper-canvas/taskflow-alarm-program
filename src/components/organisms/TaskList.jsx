@@ -4,8 +4,8 @@ import Empty from "@/components/ui/Empty";
 
 const TaskList = ({ tasks, onToggle, onEdit, onDelete, categories, showEmpty = true }) => {
   const getCategoryColor = (categoryName) => {
-    const category = categories.find((c) => c.name === categoryName);
-    return category ? category.color : "#6366F1";
+    const category = categories.find((c) => c.name_c === categoryName);
+    return category ? category.color_c : "#6366F1";
   };
 
   if (tasks.length === 0 && showEmpty) {
@@ -26,14 +26,14 @@ const TaskList = ({ tasks, onToggle, onEdit, onDelete, categories, showEmpty = t
   return (
     <div className="space-y-3">
       <AnimatePresence mode="popLayout">
-        {tasks.map((task) => (
-<TaskCard
+{tasks.map((task) => (
+          <TaskCard
             key={task.Id}
             task={task}
             onToggle={onToggle}
             onEdit={onEdit}
             onDelete={onDelete}
-            categoryColor={getCategoryColor(task.category)}
+            categoryColor={getCategoryColor(task.category_c)}
           />
         ))}
       </AnimatePresence>

@@ -8,26 +8,26 @@ import Select from "@/components/atoms/Select";
 import FormField from "@/components/molecules/FormField";
 
 const TaskModal = ({ isOpen, onClose, onSave, task, categories }) => {
-  const [formData, setFormData] = useState({
-title: "",
-    description: "",
-    dueDate: "",
-    priority: "medium",
-    category: "personal",
-    project: "General"
+const [formData, setFormData] = useState({
+    title_c: "",
+    description_c: "",
+    due_date_c: "",
+    priority_c: "medium",
+    category_c: "personal",
+    project_c: "General"
   });
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (task) {
+if (task) {
       setFormData({
-        title: task.title,
-        description: task.description || "",
-        dueDate: task.dueDate ? format(new Date(task.dueDate), "yyyy-MM-dd") : "",
-        priority: task.priority,
-category: task.category,
-        project: task.project
+        title_c: task.title_c || "",
+        description_c: task.description_c || "",
+        due_date_c: task.due_date_c ? format(new Date(task.due_date_c), "yyyy-MM-dd") : "",
+        priority_c: task.priority_c || "medium",
+        category_c: task.category_c || "personal",
+        project_c: task.project_c || "General"
       });
     } else {
       setFormData({
@@ -55,8 +55,8 @@ category: task.category,
     e.preventDefault();
     if (validate()) {
       onSave({
-        ...formData,
-        dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
+...formData,
+        due_date_c: formData.due_date_c ? new Date(formData.due_date_c).toISOString() : null
       });
     }
   };
@@ -104,8 +104,8 @@ category: task.category,
           <form onSubmit={handleSubmit} className="p-6 space-y-5">
             <FormField label="Task Title" error={errors.title} required>
               <Input
-                value={formData.title}
-                onChange={(e) => handleChange("title", e.target.value)}
+value={formData.title_c}
+                onChange={(e) => handleChange("title_c", e.target.value)}
                 placeholder="Enter task title"
                 error={errors.title}
               />
@@ -113,8 +113,8 @@ category: task.category,
 
             <FormField label="Description">
               <textarea
-                value={formData.description}
-                onChange={(e) => handleChange("description", e.target.value)}
+value={formData.description_c}
+                onChange={(e) => handleChange("description_c", e.target.value)}
                 placeholder="Add more details..."
                 rows={3}
                 className="w-full px-4 py-2.5 bg-white border-2 border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 resize-none"
@@ -123,16 +123,17 @@ category: task.category,
 
             <FormField label="Due Date">
               <Input
-                type="date"
-                value={formData.dueDate}
+type="date"
+                value={formData.due_date_c}
+                onChange={(e) => handleChange("due_date_c", e.target.value)}
                 onChange={(e) => handleChange("dueDate", e.target.value)}
               />
             </FormField>
 
             <FormField label="Priority">
               <Select
-                value={formData.priority}
-                onChange={(e) => handleChange("priority", e.target.value)}
+value={formData.priority_c}
+                onChange={(e) => handleChange("priority_c", e.target.value)}
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -142,20 +143,21 @@ category: task.category,
 
             <FormField label="Category">
               <Select
-                value={formData.category}
-                onChange={(e) => handleChange("category", e.target.value)}
+value={formData.category_c}
+                onChange={(e) => handleChange("category_c", e.target.value)}
               >
                 {categories.map((category) => (
-                  <option key={category.Id} value={category.name}>
-                    {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
+                  <option key={category.Id} value={category.name_c}>
+                    {(category.name_c || "").charAt(0).toUpperCase() + (category.name_c || "").slice(1)}
                   </option>
                 ))}
               </Select>
-</FormField>
+            </FormField>
 
             <FormField label="Project" required>
-              <Input
-                value={formData.project}
+<Input
+                value={formData.project_c}
+                onChange={(e) => handleChange('project_c', e.target.value)}
                 onChange={(e) => handleChange('project', e.target.value)}
                 placeholder="Enter project name"
               />

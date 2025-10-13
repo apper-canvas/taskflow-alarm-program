@@ -6,7 +6,7 @@ import PriorityBadge from "@/components/molecules/PriorityBadge";
 import { cn } from "@/utils/cn";
 
 const TaskCard = ({ task, onToggle, onEdit, onDelete, categoryColor }) => {
-  const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
+  const isOverdue = task.due_date_c && new Date(task.due_date_c) < new Date() && !task.completed_c;
 
   return (
     <motion.div
@@ -17,50 +17,51 @@ const TaskCard = ({ task, onToggle, onEdit, onDelete, categoryColor }) => {
       whileHover={{ y: -2 }}
       className={cn(
         "bg-white rounded-xl p-4 shadow-card hover:shadow-card-hover transition-all duration-200 border-l-4",
-        task.completed && "opacity-60"
+        task.completed_c && "opacity-60"
       )}
       style={{ borderLeftColor: categoryColor }}
     >
       <div className="flex items-start gap-3">
         <div className="pt-0.5">
-          <Checkbox checked={task.completed} onChange={() => onToggle(task.Id)} />
+          <Checkbox checked={task.completed_c} onChange={() => onToggle(task.Id)} />
         </div>
         
         <div className="flex-1 min-w-0">
           <h3 className={cn(
             "text-base font-semibold text-slate-900 mb-1",
-            task.completed && "line-through text-slate-500"
+            task.completed_c && "line-through text-slate-500"
           )}>
-            {task.title}
+            {task.title_c}
           </h3>
           
-          {task.description && (
+          {task.description_c && (
             <p className="text-sm text-slate-600 mb-3 line-clamp-2">
-              {task.description}
+              {task.description_c}
             </p>
           )}
           
           <div className="flex flex-wrap items-center gap-3">
-            <PriorityBadge priority={task.priority} />
+            <PriorityBadge priority={task.priority_c} />
             
-            {task.dueDate && (
+            {task.due_date_c && (
               <div className={cn(
                 "flex items-center gap-1.5 text-sm",
                 isOverdue ? "text-error font-medium" : "text-slate-600"
               )}>
                 <ApperIcon name="Calendar" size={14} />
-                <span>{format(new Date(task.dueDate), "MMM d, yyyy")}</span>
+                <span>{format(new Date(task.due_date_c), "MMM d, yyyy")}</span>
               </div>
             )}
-<div className="flex items-center gap-3">
+            
+            <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-sm text-slate-600">
                 <ApperIcon name="Tag" size={14} />
-                <span className="capitalize">{task.category}</span>
+                <span className="capitalize">{task.category_c}</span>
               </div>
               
               <div className="flex items-center gap-1.5 text-sm text-slate-600">
                 <ApperIcon name="Briefcase" size={14} />
-                <span>{task.project}</span>
+                <span>{task.project_c}</span>
               </div>
             </div>
           </div>
