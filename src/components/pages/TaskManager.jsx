@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { AuthContext } from "../../App";
+import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { AuthContext } from '../../App';
 import taskService from "@/services/api/taskService";
 import categoryService from "@/services/api/categoryService";
 import ApperIcon from "@/components/ApperIcon";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Projects from "@/components/pages/Projects";
-import Clients from "@/components/pages/Clients";
 import Button from "@/components/atoms/Button";
-import SearchBar from "@/components/molecules/SearchBar";
 import QuickAddInput from "@/components/molecules/QuickAddInput";
-import ConfettiEffect from "@/components/organisms/ConfettiEffect";
+import SearchBar from "@/components/molecules/SearchBar";
 import FilterBar from "@/components/organisms/FilterBar";
 import TaskList from "@/components/organisms/TaskList";
 import TaskModal from "@/components/organisms/TaskModal";
+import ConfettiEffect from "@/components/organisms/ConfettiEffect";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
 const TaskManager = () => {
 const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -31,7 +30,6 @@ const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [activeView, setActiveView] = useState("tasks");
 
   const loadData = async () => {
     try {
@@ -160,131 +158,126 @@ await taskService.delete(id);
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadData} />;
 
-return (
+  return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {activeView === "tasks" && (
-        <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-          <motion.header
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center space-y-2 mb-8"
-          >
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="bg-gradient-to-br from-primary to-secondary p-3 rounded-2xl">
-                <ApperIcon name="CheckCircle2" size={32} className="text-white" />
-              </div>
+      <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-2 mb-8"
+        >
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <div className="bg-gradient-to-br from-primary to-secondary p-3 rounded-2xl">
+              <ApperIcon name="CheckCircle2" size={32} className="text-white" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              TaskFlow
-            </h1>
-            <p className="text-slate-600">Organize your day with minimal friction</p>
-            <div className="flex items-center justify-center gap-4 mt-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">{activeTasks.length}</div>
-                <div className="text-xs text-slate-600">Active</div>
-              </div>
-              <div className="w-px h-8 bg-slate-300"></div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-success">{completedTasks.length}</div>
-                <div className="text-xs text-slate-600">Completed</div>
-              </div>
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            TaskFlow
+          </h1>
+          <p className="text-slate-600">Organize your day with minimal friction</p>
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary">{activeTasks.length}</div>
+              <div className="text-xs text-slate-600">Active</div>
             </div>
-          </motion.header>
+            <div className="w-px h-8 bg-slate-300"></div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-success">{completedTasks.length}</div>
+              <div className="text-xs text-slate-600">Completed</div>
+            </div>
+          </div>
+        </motion.header>
 
-          <div className="space-y-4">
-            <QuickAddInput onAdd={handleQuickAdd} loading={loading} />
-            
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <SearchBar value={searchQuery} onChange={setSearchQuery} />
-              </div>
-              <Button 
-                variant={activeView === "projects" ? "primary" : "outline"}
-                onClick={() => setActiveView("projects")} 
-                className="flex items-center gap-2"
-              >
-                <ApperIcon name="FolderOpen" size={20} />
-                <span className="hidden sm:inline">Projects</span>
-              </Button>
-              <Button 
-                variant={activeView === "clients" ? "primary" : "outline"}
-                onClick={() => setActiveView("clients")} 
-                className="flex items-center gap-2"
-              >
-                <ApperIcon name="Users" size={20} />
-                <span className="hidden sm:inline">Clients</span>
-              </Button>
-              <Button variant="primary" onClick={() => { setActiveView("tasks"); handleNewTask(); }} className="flex items-center gap-2">
-                <ApperIcon name="Plus" size={20} />
-                <span className="hidden sm:inline">New Task</span>
-              </Button>
+        <div className="space-y-4">
+          <QuickAddInput onAdd={handleQuickAdd} loading={loading} />
+          
+<div className="flex gap-3">
+            <div className="flex-1">
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
             </div>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/projects')} 
+              className="flex items-center gap-2"
+            >
+              <ApperIcon name="FolderOpen" size={20} />
+              <span className="hidden sm:inline">Projects</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/clients')} 
+              className="flex items-center gap-2"
+            >
+              <ApperIcon name="Users" size={20} />
+              <span className="hidden sm:inline">Clients</span>
+            </Button>
+            <Button variant="primary" onClick={handleNewTask} className="flex items-center gap-2">
+              <ApperIcon name="Plus" size={20} />
+              <span className="hidden sm:inline">New Task</span>
+            </Button>
+          </div>
 
-            <FilterBar
+          <FilterBar
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+          />
+        </div>
+
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-slate-900">
+                Active Tasks ({activeTasks.length})
+              </h2>
+            </div>
+            <TaskList
+tasks={filteredAndSortedTasks.filter((t) => !t.completed_c)}
+              onToggle={handleToggleComplete}
+              onEdit={handleEditTask}
+              onDelete={handleDeleteTask}
               categories={categories}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
             />
           </div>
 
-          <div className="space-y-6">
+{completedTasks.length > 0 && (
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-slate-900">
-                  Active Tasks ({activeTasks.length})
+              <motion.button
+                onClick={() => setShowCompleted(!showCompleted)}
+                className="flex items-center gap-2 text-slate-700 hover:text-primary transition-colors mb-4"
+              >
+                <ApperIcon
+                  name={showCompleted ? "ChevronDown" : "ChevronRight"}
+                  size={20}
+                />
+                <h2 className="text-xl font-semibold">
+                  Completed Tasks ({completedTasks.length})
                 </h2>
-              </div>
-              <TaskList
-                tasks={filteredAndSortedTasks.filter((t) => !t.completed_c)}
-                onToggle={handleToggleComplete}
-                onEdit={handleEditTask}
-                onDelete={handleDeleteTask}
-                categories={categories}
-              />
+              </motion.button>
+              <AnimatePresence>
+                {showCompleted && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+<TaskList
+                      tasks={filteredAndSortedTasks.filter((t) => t.completed)}
+                      onToggle={handleToggleComplete}
+                      onEdit={handleEditTask}
+                      onDelete={handleDeleteTask}
+                      categories={categories}
+                      showEmpty={false}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-
-            {completedTasks.length > 0 && (
-              <div>
-                <motion.button
-                  onClick={() => setShowCompleted(!showCompleted)}
-                  className="flex items-center gap-2 text-slate-700 hover:text-primary transition-colors mb-4"
-                >
-                  <ApperIcon
-                    name={showCompleted ? "ChevronDown" : "ChevronRight"}
-                    size={20}
-                  />
-                  <h2 className="text-xl font-semibold">
-                    Completed Tasks ({completedTasks.length})
-                  </h2>
-                </motion.button>
-                <AnimatePresence>
-                  {showCompleted && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
-                      <TaskList
-                        tasks={filteredAndSortedTasks.filter((t) => t.completed)}
-                        onToggle={handleToggleComplete}
-                        onEdit={handleEditTask}
-                        onDelete={handleDeleteTask}
-                        categories={categories}
-                        showEmpty={false}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
+          )}
         </div>
-)}
-
-      {activeView === "projects" && <Projects />}
-      {activeView === "clients" && <Clients />}
+      </div>
 
       <TaskModal
         isOpen={isModalOpen}
