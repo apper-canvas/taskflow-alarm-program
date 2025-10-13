@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { AuthContext } from '../../App';
@@ -16,8 +17,8 @@ import TaskModal from "@/components/organisms/TaskModal";
 import ConfettiEffect from "@/components/organisms/ConfettiEffect";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
-
 const TaskManager = () => {
+const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -190,10 +191,18 @@ await taskService.delete(id);
         <div className="space-y-4">
           <QuickAddInput onAdd={handleQuickAdd} loading={loading} />
           
-          <div className="flex gap-3">
+<div className="flex gap-3">
             <div className="flex-1">
               <SearchBar value={searchQuery} onChange={setSearchQuery} />
             </div>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/projects')} 
+              className="flex items-center gap-2"
+            >
+              <ApperIcon name="FolderOpen" size={20} />
+              <span className="hidden sm:inline">Projects</span>
+            </Button>
             <Button variant="primary" onClick={handleNewTask} className="flex items-center gap-2">
               <ApperIcon name="Plus" size={20} />
               <span className="hidden sm:inline">New Task</span>

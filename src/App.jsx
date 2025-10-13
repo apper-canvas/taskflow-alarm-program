@@ -11,7 +11,7 @@ import ResetPassword from "@/components/pages/ResetPassword";
 import PromptPassword from "@/components/pages/PromptPassword";
 import NotFound from "@/components/pages/NotFound";
 import TaskManager from "@/components/pages/TaskManager";
-
+import Projects from "@/components/pages/Projects";
 // Create auth context
 export const AuthContext = createContext(null);
 
@@ -124,7 +124,8 @@ return (
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
         <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-        <Route path="/" element={<TaskManager />} />
+<Route path="/" element={<TaskManager />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer 
