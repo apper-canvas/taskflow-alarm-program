@@ -203,6 +203,14 @@ await taskService.delete(id);
               <ApperIcon name="FolderOpen" size={20} />
               <span className="hidden sm:inline">Projects</span>
             </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/clients')} 
+              className="flex items-center gap-2"
+            >
+              <ApperIcon name="Users" size={20} />
+              <span className="hidden sm:inline">Clients</span>
+            </Button>
             <Button variant="primary" onClick={handleNewTask} className="flex items-center gap-2">
               <ApperIcon name="Plus" size={20} />
               <span className="hidden sm:inline">New Task</span>
