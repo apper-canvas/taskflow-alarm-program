@@ -116,32 +116,30 @@ function App() {
   }
   
 return (
-    <BrowserRouter>
-      <AuthContext.Provider value={authMethods}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/callback" element={<Callback />} />
-          <Route path="/error" element={<ErrorPage />} />
-          <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
-          <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-          <Route path="/" element={<TaskManager />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ToastContainer 
-          position="top-right" 
-          autoClose={3000} 
-          hideProgressBar={false} 
-          newestOnTop 
-          closeOnClick 
-          rtl={false} 
-          pauseOnFocusLoss 
-          draggable 
-          pauseOnHover 
-          theme="light" 
-        />
-      </AuthContext.Provider>
-    </BrowserRouter>
+<AuthContext.Provider value={authMethods}>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/callback" element={<Callback />} />
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
+        <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
+        <Route path="/" element={<TaskManager />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <ToastContainer 
+        position="top-right" 
+        autoClose={3000} 
+        hideProgressBar={false} 
+        newestOnTop 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+        theme="light" 
+      />
+    </AuthContext.Provider>
   );
 }
 
