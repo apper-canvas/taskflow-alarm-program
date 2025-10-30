@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { useContext } from 'react';
-import { AuthContext } from '../../App';
+import { useOutletContext } from 'react-router-dom';
 import projectService from "@/services/api/projectService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
@@ -18,7 +17,7 @@ import Empty from "@/components/ui/Empty";
 const Projects = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const { logout } = useContext(AuthContext);
+const { logout } = useOutletContext();
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
